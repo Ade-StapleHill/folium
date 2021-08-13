@@ -10,7 +10,7 @@ from branca.colormap import linear
 
 import folium
 from folium.plugins import TimeSliderChoropleth
-
+from folium.utilities import normalize
 
 import numpy as np
 
@@ -19,7 +19,6 @@ import pandas as pd
 import pytest
 
 
-@pytest.mark.xfail
 def test_timedynamic_geo_json():
     """
     tests folium.plugins.TimeSliderChoropleth
@@ -71,12 +70,14 @@ def test_timedynamic_geo_json():
     rendered = time_slider_choropleth._template.module.script(time_slider_choropleth)
 
     m._repr_html_()
-    out = m._parent.render()
+    out = normalize(m._parent.render())
     assert '<script src="https://d3js.org/d3.v4.min.js"></script>' in out
 
     # We verify that data has been inserted correctly
-    expected_timestamps = """var timestamps = ["1454198400", "1456704000", "1459382400"];"""  # noqa
-    assert expected_timestamps.split(';')[0].strip() == rendered.split(';')[0].strip()
+    expected_timestamps = "var timestamps = {};".format(list(dt_index))
+    expected_timestamps = expected_timestamps.split(';')[0].strip().replace("'", '"')
+    rendered_timestamps = rendered.split(';')[0].strip()
+    assert expected_timestamps == rendered_timestamps
 
-    expected_styledict = json.dumps(styledict, sort_keys=True, indent=2)
-    assert expected_styledict in rendered
+    expected_styledict = normalize(json.dumps(styledict, sort_keys=True))
+    assert expected_styledict in normalize(rendered)
