@@ -28,8 +28,9 @@ def test_timedynamic_geo_json():
     datapath = gpd.datasets.get_path('naturalearth_lowres')
     gdf = gpd.read_file(datapath)
 
+    # Start date is earlier than 2001-09-09 which is 10**9 ticks, end date is later
     n_periods = 3
-    dt_index = pd.date_range('2016-1-1', periods=n_periods, freq='M').strftime('%s')
+    dt_index = pd.date_range('2001-08-1', periods=n_periods, freq='M').strftime('%s')
 
     styledata = {}
 
@@ -74,7 +75,8 @@ def test_timedynamic_geo_json():
     assert '<script src="https://d3js.org/d3.v4.min.js"></script>' in out
 
     # We verify that data has been inserted correctly
-    expected_timestamps = "var timestamps = {};".format(list(dt_index))
+    expected_timestamps = sorted(dt_index, key=int)     # numeric sort
+    expected_timestamps = "var timestamps = {};".format(expected_timestamps)
     expected_timestamps = expected_timestamps.split(';')[0].strip().replace("'", '"')
     rendered_timestamps = rendered.split(';')[0].strip()
     assert expected_timestamps == rendered_timestamps
