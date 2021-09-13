@@ -28,9 +28,11 @@ def test_timedynamic_geo_json():
     datapath = gpd.datasets.get_path('naturalearth_lowres')
     gdf = gpd.read_file(datapath)
 
-    # Start date is earlier than 2001-09-09 which is 10**9 ticks, end date is later
+    # Timestamps, start date is earlier than 2001-09-09 (9 digit timestamp), end date is later (10 digits)
+    # datetime.strftime('%s') not available on Windows
     n_periods = 3
-    dt_index = pd.date_range('2001-08-1', periods=n_periods, freq='M').strftime('%s')
+    dt_range = pd.Series(pd.date_range('2001-08-1', periods=n_periods, freq='M')) 
+    dt_index = [f"{dt.timestamp():.0f}" for dt in dt_range]
 
     styledata = {}
 

@@ -155,7 +155,7 @@ class TimeSliderChoropleth(JSCSSMixin, Layer):
         timestamps = list(timestamps)
         try:
             timestamps = sorted(timestamps, key=int)
-        except TypeError:
+        except:
             timestamps = sorted(timestamps)
 
         self.timestamps = timestamps
