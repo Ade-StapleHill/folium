@@ -63,11 +63,11 @@ class TimeSliderChoropleth(JSCSSMixin, Layer):
                     var opacity = 0;
                     if (current_timestamp in style){
                         fillColor = style[current_timestamp]['color'];
-                        opacity = style[current_timestamp]['opacity'];
-                        d3.selectAll('#feature-'+feature_id
-                        ).attr('fill', fillColor)
-                        .style('fill-opacity', opacity);
-                    }
+                        opacity = style[current_timestamp]['opacity']
+                    };
+                    d3.selectAll('#feature-'+feature_id
+                    ).attr('fill', fillColor)
+                    .style('fill-opacity', opacity);
                 }
             }
 
