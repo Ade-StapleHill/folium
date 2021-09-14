@@ -64,6 +64,9 @@ class TimeSliderChoropleth(JSCSSMixin, Layer):
                     if (current_timestamp in style){
                         fillColor = style[current_timestamp]['color'];
                         opacity = style[current_timestamp]['opacity']
+                    } else {
+                        var fillColor = 'white';
+                        var opacity = 0;
                     };
                     d3.selectAll('#feature-'+feature_id
                     ).attr('fill', fillColor)
